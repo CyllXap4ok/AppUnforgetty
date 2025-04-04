@@ -1,0 +1,37 @@
+<resources>
+
+    <plurals name="hour_plurals">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
+    </plurals>
+
+    <plurals name="minute_plurals">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+    </plurals>
+
+    <string name="app_name">Незабывайка</string>
+    <string name="day_1">пн</string>
+    <string name="day_2">вт</string>
+    <string name="day_3">ср</string>
+    <string name="day_4">чт</string>
+    <string name="day_5">пт</string>
+    <string name="day_6">сб</string>
+    <string name="day_7">вс</string>
+    <string name="month_1">январь</string>
+    <string name="month_2">февраль</string>
+    <string name="month_3">март</string>
+    <string name="month_4">апрель</string>
+    <string name="month_5">май</string>
+    <string name="month_6">июнь</string>
+    <string name="month_7">июль</string>
+    <string name="month_8">август</string>
+    <string name="month_9">сентябрь</string>
+    <string name="month_10">октябрь</string>
+    <string name="month_11">ноябрь</string>
+    <string name="month_12">декабрь</string>
+    <string name="emptyTasks">На этот день задачь нет :)\nВы можете пополнить их список,\nнажав на кнопку \"+\"</string>
+
+</resources>

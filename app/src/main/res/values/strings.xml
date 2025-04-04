@@ -1,0 +1,42 @@
+<resources>
+
+    <plurals name="hour_plurals">
+        <item quantity="zero" />
+        <item quantity="one">%d hour</item>
+        <item quantity="two">%d hours</item>
+        <item quantity="few">%d hours</item>
+        <item quantity="many">%d hours</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+
+    <plurals name="minute_plurals">
+        <item quantity="zero" />
+        <item quantity="one">%d minute</item>
+        <item quantity="two">%d minutes</item>
+        <item quantity="few">%d minutes</item>
+        <item quantity="many">%d minutes</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
+    <string name="app_name">Unforgetty</string>
+    <string name="day_1">mo</string>
+    <string name="day_2">tu</string>
+    <string name="day_3">we</string>
+    <string name="day_4">th</string>
+    <string name="day_5">fr</string>
+    <string name="day_6">sa</string>
+    <string name="day_7">su</string>
+    <string name="month_1">january</string>
+    <string name="month_2">february</string>
+    <string name="month_3">march</string>
+    <string name="month_4">april</string>
+    <string name="month_5">may</string>
+    <string name="month_6">june</string>
+    <string name="month_7">july</string>
+    <string name="month_8">august</string>
+    <string name="month_9">september</string>
+    <string name="month_10">october</string>
+    <string name="month_11">november</string>
+    <string name="month_12">december</string>
+    <string name="emptyTasks">There are no tasks for today :\nYou can add to their list\nby clicking on the \"+\" button</string>
+</resources>
