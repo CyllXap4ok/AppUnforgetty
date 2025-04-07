@@ -11,8 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,17 +30,17 @@ import com.helpyapps.unforgetty.view.common.calendar.items.HorizontalGradientDiv
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    mainScreenViewModel: MainScreenViewModel = viewModel(factory = MainScreenViewModel.Factory),
+    vm: MainScreenViewModel = viewModel(factory = MainScreenViewModel.Factory),
     navigateToTaskScreen: (TaskEntity) -> Unit
 ) {
+    
+    val isLoading = vm.isLoading.observeAsState()
 
-    val tasksIsLoading by mainScreenViewModel.tasksIsLoading.collectAsState()
+    val calendarState = vm.calendarState
 
-    val calendarState = mainScreenViewModel.calendarState
+    val dayTasks = vm.dayTasks
 
-    val dayTasks = mainScreenViewModel.dayTasks
-
-    if (tasksIsLoading) {
+    if (isLoading.value == true) {
 
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -58,13 +57,12 @@ fun MainScreen(
         ) {
 
             CalendarView(
-                modifier = Modifier.fillMaxWidth(),
                 calendarState = calendarState,
                 onMonthChanged = {
-                    mainScreenViewModel.getMonthTasks(calendarState.year, calendarState.month)
+                    vm.getMonthTasks(calendarState.year, calendarState.month.value)
                 },
                 onDayClick = {
-                    mainScreenViewModel.getDayTasks(calendarState.selectedDay)
+                    vm.getDayTasks(calendarState.selectedDay)
                 }
             )
 
@@ -103,7 +101,7 @@ fun MainScreen(
                     val taskScreenData = TaskEntity(
                         null,
                         year = calendarState.year,
-                        month = calendarState.month,
+                        month = calendarState.month.value,
                         day = calendarState.selectedDay,
                         fromHour = null,
                         fromMinute = null,

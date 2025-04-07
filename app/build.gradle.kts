@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.lifecycle.viewmodel.savedstate)
+    implementation(libs.androidx.runtime.livedata)
 
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.core.ktx)

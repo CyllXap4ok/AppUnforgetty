@@ -1,100 +1,120 @@
 package com.helpyapps.unforgetty.view.common.calendar.model
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.capitalize
+import java.time.DayOfWeek
 import java.time.LocalDate
-
-private val currentDate = LocalDate.now()
+import java.time.Month
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
-fun rememberCalendarState(localDate: LocalDate = currentDate): CalendarState {
+fun rememberCalendarState(localDate: LocalDate = LocalDate.now()): CalendarState {
     return rememberSaveable(saver = CalendarState.Saver) {
         CalendarState(localDate)
     }
 }
 
 class CalendarState(
-    private var localDate: LocalDate = LocalDate.now()
+    initialDate: LocalDate = LocalDate.now(),
+    private val locale: Locale = Locale.getDefault()
 ) {
 
-    var year by mutableIntStateOf(localDate.year)
-        private set
-    var month by mutableIntStateOf(localDate.monthValue)
-        private set
-    private var selectedDate by mutableStateOf(localDate)
-    val selectedDay get() = selectedDate.dayOfMonth
+    // Текущая дата для сравнения
+    private val currentDate = LocalDate.now()
 
-    var firstDayOffset by mutableIntStateOf(
-        LocalDate.of(localDate.year, localDate.monthValue, 1).dayOfWeek.ordinal
-    )
-        private set
+    // Основная дата
+    private var _baseDate by mutableStateOf(initialDate)
 
-    private var lengthOfMonth by mutableIntStateOf(localDate.lengthOfMonth())
+    // Выбранная дата
+    private var _selectedDate by mutableStateOf(initialDate)
 
-    private var daysWithTasks = mutableStateListOf<Int>()
+    // Дни с задачами
+    private val _daysWithTasks = mutableStateListOf<Int>()
 
-    val days get() = List(lengthOfMonth) { i ->
+    val year: Int get() = _baseDate.year
+    val month: Month get() = _baseDate.month
+    val selectedDay: Int get() = _selectedDate.dayOfMonth
+    val monthName: String get() =
+        month.getDisplayName(TextStyle.FULL_STANDALONE, locale).replaceFirstChar { it.uppercase() }
+
+    // Смещение первого дня месяца (0-6)
+    val firstDayOffset: Int get() = _baseDate.withDayOfMonth(1).dayOfWeek.ordinal
+
+    val days: List<CalendarDay> get() = List(_baseDate.lengthOfMonth()) { dayNumber ->
+        val day = dayNumber + 1
         CalendarDay(
-            number = i+1,
-            haveTasks = daysWithTasks.contains(i+1)
+            number = day,
+            haveTasks = _daysWithTasks.contains(day),
+            isCurrent = isCurrentDay(day),
+            isSelected = isSelectedDay(day)
         )
-    }.also {
-        if (year == currentDate.year && month == currentDate.monthValue) {
-            it[currentDate.dayOfMonth-1].isCurrent = true
-        }
-        if (year == selectedDate.year && month == selectedDate.monthValue) {
-            it[selectedDay-1].isSelected = true
-        }
     }
 
-    fun setDaysWithTasks(days: List<Int>) {
-        daysWithTasks.clear()
-        daysWithTasks.addAll(days)
+    val viewDays: List<CalendarDay?> get() {
+        val daysList = mutableListOf<CalendarDay?>().apply {
+            Log.d("AAA", firstDayOffset.toString())
+            repeat(firstDayOffset) { add(null) }
+            addAll(days)
+        }
+
+        return daysList
     }
 
+    private fun isCurrentDay(day: Int): Boolean {
+        return _baseDate.year == currentDate.year &&
+                _baseDate.month == currentDate.month &&
+                day == currentDate.dayOfMonth
+    }
+
+    private fun isSelectedDay(day: Int): Boolean {
+        return _baseDate.year == _selectedDate.year &&
+                _baseDate.month == _selectedDate.month &&
+                day == _selectedDate.dayOfMonth
+    }
+
+    // Обновляет дни с задачами
+    fun updateDaysWithTasks(days: List<Int>) {
+        _daysWithTasks.clear()
+        _daysWithTasks.addAll(days)
+    }
+
+    // Добавляет день с задачами
     fun addDayWithTask(day: Int) {
-        if (!daysWithTasks.contains(day)) daysWithTasks.add(day)
+        if (!_daysWithTasks.contains(day)) _daysWithTasks.add(day)
     }
 
     fun nextMonth() {
-        localDate = localDate.plusMonths(1)
-        updateValues()
+        _baseDate = _baseDate.plusMonths(1)
     }
 
     fun prevMonth() {
-        localDate = localDate.minusMonths(1)
-        updateValues()
+        _baseDate = _baseDate.minusMonths(1)
     }
 
-    fun selectDay(day: CalendarDay) {
-        selectedDate = localDate.withDayOfMonth(day.number)
-    }
-
-    private fun updateValues() {
-        year = localDate.year
-        month = localDate.monthValue
-        lengthOfMonth = localDate.lengthOfMonth()
-        firstDayOffset = LocalDate.of(localDate.year, localDate.monthValue, 1).dayOfWeek.ordinal
+    fun selectDay(day: Int) {
+        _selectedDate = _baseDate.withDayOfMonth(day)
     }
 
     companion object {
         val Saver: Saver<CalendarState, *> = listSaver(
             save = {
                 listOf(
-                    it.localDate,
-                    it.selectedDate
+                    it._baseDate,
+                    it._selectedDate
                 )
             },
             restore = {
                 CalendarState(it[0]).apply {
-                    selectedDate = it[1]
+                    _selectedDate = it[1]
                 }
             }
         )

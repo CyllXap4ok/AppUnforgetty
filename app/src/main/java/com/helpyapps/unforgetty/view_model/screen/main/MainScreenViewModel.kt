@@ -6,6 +6,8 @@ import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.util.fastFilter
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -33,8 +35,8 @@ class MainScreenViewModel(
 
     val calendarState by savedState.saveable(saver = CalendarState.Saver) { CalendarState() }
 
-    private val _tasksIsLoading = MutableStateFlow(false)
-    val tasksIsLoading = _tasksIsLoading.asStateFlow()
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
     val tasks = mutableStateListOf<TaskEntity>()
     val monthTasks = mutableStateListOf<TaskEntity>()
     val dayTasks: SnapshotStateList<TaskEntity> by savedState.saveable(
@@ -46,12 +48,12 @@ class MainScreenViewModel(
     init { downloadTasks() }
 
     private fun downloadTasks() = viewModelScope.launch {
-        _tasksIsLoading.value = true
+        _isLoading.postValue(true)
         tasks.addAll(dataBase.dao.downloadTasks())
-        getMonthTasks(calendarState.year, calendarState.month)
+        getMonthTasks(calendarState.year, calendarState.month.value)
         getDayTasks(calendarState.selectedDay)
         delay(800)
-        _tasksIsLoading.value = false
+        _isLoading.postValue(false)
     }
 
     private fun insertTaskToDB(task: TaskEntity) = viewModelScope.launch {
@@ -80,7 +82,7 @@ class MainScreenViewModel(
     fun getMonthTasks(year: Int, month: Int) {
         monthTasks.clear()
         monthTasks.addAll(tasks.fastFilter { it.year == year && it.month == month })
-        calendarState.setDaysWithTasks(monthTasks.map { it.day }.distinct())
+        calendarState.updateDaysWithTasks(monthTasks.map { it.day }.distinct())
     }
 
     fun getDayTasks(day: Int) {

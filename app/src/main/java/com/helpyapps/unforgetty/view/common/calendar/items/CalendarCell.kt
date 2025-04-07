@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.helpyapps.unforgetty.view.common.calendar.model.CalendarDay
 
 @Composable
-fun CalendarCellView(
+fun CalendarCell(
     day: CalendarDay,
     focusRequester: FocusRequester,
     onClick: () -> Unit
