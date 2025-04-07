@@ -12,10 +12,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.helpyapps.unforgetty.data.tasks_data_base.TaskEntity
-import com.helpyapps.unforgetty.navigation.Main
-import com.helpyapps.unforgetty.screens.main.MainScreen
-import com.helpyapps.unforgetty.screens.task.TaskScreen
+import com.helpyapps.unforgetty.model.tasks_db.TaskEntity
+import com.helpyapps.unforgetty.model.navigation.Main
+import com.helpyapps.unforgetty.view.screen.main.MainScreen
+import com.helpyapps.unforgetty.view.screen.task.TaskScreen
 import com.helpyapps.unforgetty.ui.theme.UnforgettyTheme
 
 class MainActivity : ComponentActivity() {

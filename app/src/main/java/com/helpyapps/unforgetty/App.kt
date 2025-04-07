@@ -2,7 +2,7 @@ package com.helpyapps.unforgetty
 
 import android.app.Application
 import android.util.Log
-import com.helpyapps.unforgetty.data.tasks_data_base.TasksDataBase
+import com.helpyapps.unforgetty.model.tasks_db.TasksDataBase
 
 class App : Application() {
     val tasksDB by lazy {
