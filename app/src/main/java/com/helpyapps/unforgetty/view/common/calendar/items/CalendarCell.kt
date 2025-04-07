@@ -24,7 +24,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helpyapps.unforgetty.view.common.calendar.model.CalendarDay
+import com.helpyapps.unforgetty.view.common.calendar.CalendarDay
 
 @Composable
 fun CalendarCell(

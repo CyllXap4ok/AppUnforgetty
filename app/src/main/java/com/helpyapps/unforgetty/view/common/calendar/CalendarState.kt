@@ -1,4 +1,4 @@
-package com.helpyapps.unforgetty.view.common.calendar.model
+package com.helpyapps.unforgetty.view.common.calendar
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -9,8 +9,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.capitalize
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
 import java.time.format.TextStyle
@@ -42,6 +40,8 @@ class CalendarState(
 
     val year: Int get() = _baseDate.year
     val month: Month get() = _baseDate.month
+    val selectedYear: Int get() = _selectedDate.year
+    val selectedMonth: Month get() = _selectedDate.month
     val selectedDay: Int get() = _selectedDate.dayOfMonth
     val monthName: String get() =
         month.getDisplayName(TextStyle.FULL_STANDALONE, locale).replaceFirstChar { it.uppercase() }

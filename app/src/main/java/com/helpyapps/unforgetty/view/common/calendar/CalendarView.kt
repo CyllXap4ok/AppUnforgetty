@@ -2,7 +2,6 @@ package com.helpyapps.unforgetty.view.common.calendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -20,7 +19,6 @@ import com.helpyapps.unforgetty.view.common.calendar.items.CalendarHeaderView
 import com.helpyapps.unforgetty.view.common.calendar.items.HorizontalGradientDivider
 import com.helpyapps.unforgetty.view.common.calendar.items.SwipeDirection
 import com.helpyapps.unforgetty.view.common.calendar.items.WeekDaysView
-import com.helpyapps.unforgetty.view.common.calendar.model.CalendarState
 
 @Composable
 fun CalendarView(

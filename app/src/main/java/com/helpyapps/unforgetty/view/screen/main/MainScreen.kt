@@ -33,12 +33,12 @@ fun MainScreen(
     vm: MainScreenViewModel = viewModel(factory = MainScreenViewModel.Factory),
     navigateToTaskScreen: (TaskEntity) -> Unit
 ) {
-    
-    val isLoading = vm.isLoading.observeAsState()
 
-    val calendarState = vm.calendarState
+    val calendarState = vm.calendarState.observeAsState()
 
     val dayTasks = vm.dayTasks
+
+    val isLoading = vm.isLoading.observeAsState()
 
     if (isLoading.value == true) {
 
@@ -57,12 +57,12 @@ fun MainScreen(
         ) {
 
             CalendarView(
-                calendarState = calendarState,
+                calendarState = calendarState.value!!,
                 onMonthChanged = {
-                    vm.getMonthTasks(calendarState.year, calendarState.month.value)
+                    vm.getMonthTasks(calendarState.value!!.year, calendarState.value!!.month.value)
                 },
                 onDayClick = {
-                    vm.getDayTasks(calendarState.selectedDay)
+                    vm.getDayTasks(calendarState.value!!.selectedDay)
                 }
             )
 
@@ -100,9 +100,9 @@ fun MainScreen(
                 ) {
                     val taskScreenData = TaskEntity(
                         null,
-                        year = calendarState.year,
-                        month = calendarState.month.value,
-                        day = calendarState.selectedDay,
+                        year = calendarState.value!!.selectedYear,
+                        month = calendarState.value!!.selectedMonth.value,
+                        day = calendarState.value!!.selectedDay,
                         fromHour = null,
                         fromMinute = null,
                         toHour = null,
@@ -112,7 +112,8 @@ fun MainScreen(
                         title = "Тест ${(1..100).random()}",
                         text = ""
                     )
-                    navigateToTaskScreen(taskScreenData)
+                    vm.addTask(taskScreenData)
+                    // navigateToTaskScreen(taskScreenData)
                 }
 
             }
